@@ -22,9 +22,9 @@ books_df = None
 async def load_resources():
     global db_books, embedding, books_df
 
-    faiss_index_path = "./faiss_index"
-    models_cache_path = "./models"
-    books_csv_path = "books_with_emotions.csv"
+    faiss_index_path = "../faiss_index"
+    models_cache_path = "../models"
+    books_csv_path = "../notebooks/books_with_emotions.csv"
 
     if not os.path.exists(faiss_index_path):
         raise FileNotFoundError(f"FAISS index not found at {faiss_index_path}")
