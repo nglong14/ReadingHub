@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+pandas
+langchain-huggingface
+langchain-community
+langchain-text-splitters
+qdrant-client
+langchain-qdrant
+pydantic
