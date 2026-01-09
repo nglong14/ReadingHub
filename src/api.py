@@ -3,7 +3,8 @@ from fastapi import FastAPI, HTTPException
 from models import SearchRequest, SearchResponse, BookResponse
 import pandas as pd
 from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_community.vectorstores import FAISS
+from langchain_qdrant import QdrantVectorStore
+from qdrant_client import QdrantClient
 
 # app = FastAPI()
 
@@ -22,12 +23,12 @@ books_df = None
 async def load_resources():
     global db_books, embedding, books_df
 
-    faiss_index_path = "../faiss_index"
+    qdrant_storage_path = "../qdrant_storage"
     models_cache_path = "../models"
     books_csv_path = "../notebooks/books_with_emotions.csv"
 
-    if not os.path.exists(faiss_index_path):
-        raise FileNotFoundError(f"FAISS index not found at {faiss_index_path}")
+    if not os.path.exists(qdrant_storage_path):
+        raise FileNotFoundError(f"Qdrant storage not found at {qdrant_storage_path}")
     
     if not os.path.exists(models_cache_path):
         raise FileNotFoundError(f"Models cache not found at {models_cache_path}")
@@ -39,7 +40,14 @@ async def load_resources():
         encode_kwargs={'normalize_embeddings': True}
     )
 
-    db_books = FAISS.load_local(faiss_index_path, embedding, allow_dangerous_deserialization=True)
+    # Initialize Qdrant client and load collection
+    client = QdrantClient(path=qdrant_storage_path)
+    
+    db_books = QdrantVectorStore(
+        client=client,
+        collection_name="books",
+        embedding=embedding
+    )
 
     books_df = pd.read_csv(books_csv_path)
 
