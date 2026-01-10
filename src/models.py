@@ -11,7 +11,19 @@ class BookResponse(BaseModel):
     authors: Optional[str]
     categories: Optional[str]
     description: Optional[str]
+    thumbnail: Optional[str] = None
+    average_rating: Optional[float] = None
+    num_pages: Optional[int] = None
+    published_year: Optional[int] = None
     score: Optional[float]
+    # Emotion scores
+    anger: Optional[float] = None
+    disgust: Optional[float] = None
+    fear: Optional[float] = None
+    joy: Optional[float] = None
+    sadness: Optional[float] = None
+    surprise: Optional[float] = None
+    neutral: Optional[float] = None
 
 class SearchResponse(BaseModel):
     results: List[BookResponse]

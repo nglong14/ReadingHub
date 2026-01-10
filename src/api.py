@@ -1,18 +1,25 @@
 import os
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from models import SearchRequest, SearchResponse, BookResponse
 import pandas as pd
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_qdrant import QdrantVectorStore
 from qdrant_client import QdrantClient
 
-# app = FastAPI()
-
-
 app = FastAPI(
     title="Book Recommendation API",
     description="API for book recommendation system",
     version="1.0.0"
+)
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 db_books = None 
@@ -81,7 +88,18 @@ async def search_books(request: SearchRequest):
                         authors=book.get("authors", ""),
                         categories=book.get("categories", ""),
                         description=book.get("description", ""),
-                        score=float(score)
+                        thumbnail=book.get("thumbnail", ""),
+                        average_rating=float(book.get("average_rating", 0)) if pd.notna(book.get("average_rating")) else None,
+                        num_pages=int(book.get("num_pages", 0)) if pd.notna(book.get("num_pages")) else None,
+                        published_year=int(book.get("published_year", 0)) if pd.notna(book.get("published_year")) else None,
+                        score=float(score),
+                        anger=float(book.get("anger", 0)) if pd.notna(book.get("anger")) else None,
+                        disgust=float(book.get("disgust", 0)) if pd.notna(book.get("disgust")) else None,
+                        fear=float(book.get("fear", 0)) if pd.notna(book.get("fear")) else None,
+                        joy=float(book.get("joy", 0)) if pd.notna(book.get("joy")) else None,
+                        sadness=float(book.get("sadness", 0)) if pd.notna(book.get("sadness")) else None,
+                        surprise=float(book.get("surprise", 0)) if pd.notna(book.get("surprise")) else None,
+                        neutral=float(book.get("neutral", 0)) if pd.notna(book.get("neutral")) else None,
                     ))
             except (ValueError, IndexError):
                 continue
