@@ -1,0 +1,112 @@
+.search-bar-container {
+    width: 100%;
+    padding: 0 2rem 2rem;
+}
+
+.search-form {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.search-input-wrapper {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    background: white;
+    border: 1px solid var(--goodreads-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s ease;
+}
+
+.search-input-wrapper:focus-within {
+    border-color: var(--goodreads-orange);
+    box-shadow: 0 0 0 3px rgba(214, 73, 26, 0.1);
+}
+
+.search-icon {
+    font-size: 1.2rem;
+    padding: 0 1rem;
+    display: flex;
+    align-items: center;
+    color: var(--goodreads-text-light);
+}
+
+.search-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--goodreads-text);
+    font-size: 1rem;
+    padding: 0.875rem 0.5rem;
+    font-family: 'Lato', sans-serif;
+}
+
+.search-input::placeholder {
+    color: var(--goodreads-text-light);
+}
+
+.search-input:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.search-button {
+    background: var(--goodreads-orange);
+    color: white;
+    border: none;
+    padding: 0.875rem 2rem;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    white-space: nowrap;
+    font-family: 'Lato', sans-serif;
+}
+
+.search-button:hover:not(:disabled) {
+    background: var(--goodreads-dark-orange);
+}
+
+.search-button:active:not(:disabled) {
+    transform: scale(0.98);
+}
+
+.search-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.loading-spinner {
+    display: inline-block;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (max-width: 768px) {
+    .search-bar-container {
+        padding: 0 1rem 1.5rem;
+    }
+
+    .search-input {
+        font-size: 0.95rem;
+        padding: 0.75rem 0.5rem;
+    }
+
+    .search-button {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.95rem;
+    }
+}
