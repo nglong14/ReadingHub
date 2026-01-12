@@ -6,12 +6,18 @@ import pandas as pd
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_qdrant import QdrantVectorStore
 from qdrant_client import QdrantClient
+from dotenv import load_dotenv
+from supabase import create_client, Client
+
+load_dotenv()
 
 app = FastAPI(
     title="Book Recommendation API",
     description="API for book recommendation system",
     version="1.0.0"
 )
+
+supabase: Client = create_client(os.getenv("SUPABASE_URL"), os.getenv("SUPABASE_KEY"))
 
 # Add CORS middleware
 app.add_middleware(
@@ -32,7 +38,23 @@ async def load_resources():
 
     qdrant_storage_path = "../qdrant_storage"
     models_cache_path = "../models"
-    books_csv_path = "../notebooks/books_with_emotions.csv"
+    
+    # Fetch all books data from Supabase using pagination
+    # Supabase has a default limit of 1000, so we need to paginate
+    books_data = []
+    page_size = 1000
+    offset = 0
+    
+    while True:
+        response = supabase.table("books").select("*").range(offset, offset + page_size - 1).execute()
+        if not response.data:
+            break
+        books_data.extend(response.data)
+        if len(response.data) < page_size:
+            break
+        offset += page_size
+    
+    print(f"Fetched {len(books_data)} books from Supabase")
 
     if not os.path.exists(qdrant_storage_path):
         raise FileNotFoundError(f"Qdrant storage not found at {qdrant_storage_path}")
@@ -56,7 +78,9 @@ async def load_resources():
         embedding=embedding
     )
 
-    books_df = pd.read_csv(books_csv_path)
+    # Convert Supabase data to DataFrame
+    books_df = pd.DataFrame(books_data)
+    print(books_df.shape)
 
 @app.get("/")
 async def root():
