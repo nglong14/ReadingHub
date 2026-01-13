@@ -1,5 +1,7 @@
 import { useState } from 'react';
+import Navbar from './components/Navbar';
 import SearchBar from './components/SearchBar';
+import BookCarousel from './components/BookCarousel';
 import BookCard from './components/BookCard';
 import { searchBooks } from './services/api';
 import './App.css';
@@ -16,7 +18,7 @@ function App() {
     setHasSearched(true);
 
     try {
-      const data = await searchBooks(query, 12);
+      const data = await searchBooks(query, 10);
       setBooks(data.results || []);
     } catch (err) {
       setError('Failed to search books. Please make sure the backend is running.');
@@ -28,17 +30,9 @@ function App() {
 
   return (
     <div className="app">
-      <div className="app-container">
-        <header className="app-header">
-          <h1 className="app-title">
-            <span className="title-icon">📚</span>
-            Book Recommendation
-          </h1>
-          <p className="app-subtitle">
-            Discover your next favorite book with AI-powered emotional analysis
-          </p>
-        </header>
+      <Navbar />
 
+      <div className="app-container">
         <SearchBar onSearch={handleSearch} isLoading={isLoading} />
 
         {error && (
@@ -64,9 +58,11 @@ function App() {
 
         {!isLoading && books.length > 0 && (
           <>
+            <BookCarousel books={books} />
+
             <div className="results-header">
               <h2 className="results-title">
-                Found {books.length} book{books.length !== 1 ? 's' : ''}
+                All {books.length} Result{books.length !== 1 ? 's' : ''}
               </h2>
             </div>
             <div className="books-grid">

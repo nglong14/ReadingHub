@@ -12,9 +12,9 @@
 .app-header {
   background: var(--goodreads-beige);
   border-bottom: 1px solid var(--goodreads-border);
-  padding: 1.5rem 2rem;
-  margin-bottom: 2rem;
-  box-shadow: var(--shadow-sm);
+  padding: 2rem 2rem 1.5rem;
+  margin-bottom: 1rem;
+  text-align: center;
 }
 
 .app-title {
