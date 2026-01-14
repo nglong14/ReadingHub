@@ -1,0 +1,92 @@
+/* Inherits most styles from SignIn.css */
+@import './SignIn.css';
+
+.password-strength {
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.strength-bar {
+    flex: 1;
+    height: 6px;
+    background: #e0e0e0;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.strength-fill {
+    height: 100%;
+    transition: all 0.3s ease;
+    border-radius: 3px;
+}
+
+.strength-fill.strength-1 {
+    width: 33%;
+    background: linear-gradient(90deg, #ff6b6b, #ee5a6f);
+}
+
+.strength-fill.strength-2 {
+    width: 66%;
+    background: linear-gradient(90deg, #feca57, #ff9ff3);
+}
+
+.strength-fill.strength-3 {
+    width: 100%;
+    background: linear-gradient(90deg, #48dbfb, #0abde3);
+}
+
+.strength-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    min-width: 60px;
+}
+
+.strength-fill.strength-1+.strength-label {
+    color: #ff6b6b;
+}
+
+.strength-fill.strength-2+.strength-label {
+    color: #feca57;
+}
+
+.strength-fill.strength-3+.strength-label {
+    color: #0abde3;
+}
+
+.success-message {
+    text-align: center;
+    padding: 2rem;
+}
+
+.success-icon {
+    font-size: 4rem;
+    display: block;
+    margin-bottom: 1rem;
+    animation: scaleIn 0.5s ease;
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.success-message h2 {
+    font-size: 1.5rem;
+    color: #1a1a1a;
+    margin: 0 0 0.5rem 0;
+}
+
+.success-message p {
+    font-size: 1rem;
+    color: #666;
+    margin: 0;
+}
