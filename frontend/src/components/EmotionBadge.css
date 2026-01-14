@@ -1,20 +1,22 @@
+/* EmotionBadge - Vintage style */
 .emotion-badge {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
   padding: 0.35rem 0.7rem;
-  border-radius: var(--radius-sm);
+  border-radius: 50px;
   font-size: 0.8rem;
   font-weight: 500;
-  background: white;
-  border: 1px solid var(--goodreads-border);
-  color: var(--goodreads-text);
+  background: linear-gradient(135deg, #FFF8F0 0%, #F4F1EA 100%);
+  border: 1px solid #E8E2D5;
+  color: var(--color-ink-dark);
   transition: all 0.2s ease;
 }
 
 .emotion-badge:hover {
-  border-color: var(--goodreads-orange);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+  border-color: var(--color-accent-orange);
+  box-shadow: 0 2px 6px rgba(214, 73, 26, 0.15);
 }
 
 .emotion-emoji {
@@ -30,5 +32,5 @@
 .emotion-value {
   font-weight: 600;
   margin-left: 0.15rem;
-  color: var(--goodreads-text-light);
+  color: var(--color-ink-light);
 }

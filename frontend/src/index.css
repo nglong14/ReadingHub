@@ -1,65 +1,193 @@
-@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Merriweather:wght@300;400;700&display=swap');
+@import "tailwindcss";
 
-:root {
-  /* Goodreads color palette */
-  --goodreads-tan: #F4F1EA;
-  --goodreads-brown: #382110;
-  --goodreads-beige: #F9F7F4;
-  --goodreads-orange: #D6491A;
-  --goodreads-dark-orange: #B8401A;
-  --goodreads-text: #333333;
-  --goodreads-text-light: #767676;
-  --goodreads-border: #D8D8D8;
-  --goodreads-star: #EE8A00;
+/* Custom theme configuration for Tailwind v4 */
+@theme {
+  /* Vintage primary browns */
+  --color-vintage-leather: #382110;
+  --color-vintage-leather-light: #5c4033;
+  --color-vintage-leather-dark: #2a1810;
+  --color-vintage-mahogany: #4a3728;
 
-  /* Spacing */
-  --spacing-xs: 0.5rem;
-  --spacing-sm: 1rem;
-  --spacing-md: 1.5rem;
-  --spacing-lg: 2rem;
-  --spacing-xl: 3rem;
+  /* Cream and beige backgrounds */
+  --color-parchment-light: #FFF8F0;
+  --color-parchment: #F9F7F4;
+  --color-parchment-dark: #F4F1EA;
+  --color-parchment-cream: #E8E2D5;
 
-  /* Border radius */
-  --radius-sm: 3px;
-  --radius-md: 4px;
+  /* Accent colors */
+  --color-accent-orange: #D6491A;
+  --color-accent-orange-dark: #B8401A;
+  --color-accent-gold: #C9A961;
+  --color-accent-gold-light: #D4B86A;
+  --color-accent-star: #EE8A00;
+
+  /* Text colors */
+  --color-ink-dark: #333333;
+  --color-ink-medium: #4a4a4a;
+  --color-ink-light: #767676;
+  --color-ink-muted: #999999;
+
+  /* Fonts */
+  --font-serif: 'Merriweather', Georgia, serif;
+  --font-sans: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 
   /* Shadows */
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
-  --shadow-md: 0 2px 6px rgba(0, 0, 0, 0.1);
+  --shadow-vintage: 0 2px 8px rgba(56, 33, 16, 0.15);
+  --shadow-vintage-lg: 0 4px 16px rgba(56, 33, 16, 0.2);
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-card-hover: 0 4px 12px rgba(0, 0, 0, 0.15);
+  --shadow-book: 3px 3px 8px rgba(0, 0, 0, 0.3);
+
+  /* Border radius */
+  --radius-vintage: 4px;
+  --radius-pill: 50px;
+
+  /* Animations */
+  --animate-float: float 3s ease-in-out infinite;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-5px);
+  }
 }
 
-body {
-  font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: var(--goodreads-text);
-  line-height: 1.5;
-  background: var(--goodreads-tan);
+/* Base styles */
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: var(--color-ink-dark);
+    line-height: 1.5;
+    background: var(--color-parchment-dark);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-serif);
+    font-weight: 700;
+  }
+
+  #root {
+    min-height: 100vh;
+  }
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: 'Merriweather', Georgia, serif;
-  font-weight: 700;
+/* Custom component styles */
+@layer components {
+
+  /* Vintage button styles */
+  .btn-vintage {
+    padding: 0.625rem 1.5rem;
+    border-radius: var(--radius-pill);
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-vintage);
+  }
+
+  .btn-primary {
+    background: var(--color-accent-orange);
+    color: white;
+  }
+
+  .btn-primary:hover {
+    background: var(--color-accent-orange-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-vintage-lg);
+  }
+
+  .btn-secondary {
+    background: var(--color-parchment);
+    color: var(--color-vintage-leather);
+    border: 1px solid var(--color-parchment-cream);
+  }
+
+  .btn-secondary:hover {
+    background: white;
+    transform: translateY(-2px);
+  }
+
+  /* Vintage card styles */
+  .card-vintage {
+    background: var(--color-parchment);
+    border-radius: var(--radius-vintage);
+    border: 1px solid var(--color-parchment-cream);
+    box-shadow: var(--shadow-card);
+    transition: box-shadow 0.2s ease;
+  }
+
+  .card-vintage:hover {
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  /* Vintage input styles */
+  .input-vintage {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: white;
+    border: 1px solid var(--color-parchment-cream);
+    border-radius: var(--radius-pill);
+    color: var(--color-ink-dark);
+    transition: all 0.2s ease;
+  }
+
+  .input-vintage::placeholder {
+    color: var(--color-ink-light);
+  }
+
+  .input-vintage:focus {
+    outline: none;
+    border-color: var(--color-accent-orange);
+    box-shadow: 0 0 0 3px rgba(214, 73, 26, 0.1);
+  }
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
+/* Custom utilities */
+@layer utilities {
 
-#root {
-  min-height: 100vh;
+  /* Text shadow for vintage effect */
+  .text-shadow-vintage {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Leather texture gradient */
+  .bg-leather {
+    background: linear-gradient(135deg, #382110 0%, #5c4033 50%, #4a3728 100%);
+  }
+
+  /* Parchment background */
+  .bg-parchment-texture {
+    background: linear-gradient(180deg, #FFF8F0 0%, #F4F1EA 100%);
+  }
+
+  /* Book spine shadow */
+  .shadow-book-spine {
+    box-shadow: 3px 0 8px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Animation utilities */
+  .animate-float {
+    animation: var(--animate-float);
+  }
 }
 
 /* Scrollbar styling */
@@ -68,11 +196,11 @@ code {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--goodreads-beige);
+  background: var(--color-parchment);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--goodreads-border);
+  background: #D8D8D8;
   border-radius: 5px;
 }
 
@@ -82,12 +210,12 @@ code {
 
 /* Selection styling */
 ::selection {
-  background: var(--goodreads-orange);
+  background: var(--color-accent-orange);
   color: white;
 }
 
 /* Focus styles */
 *:focus-visible {
-  outline: 2px solid var(--goodreads-orange);
+  outline: 2px solid var(--color-accent-orange);
   outline-offset: 2px;
 }

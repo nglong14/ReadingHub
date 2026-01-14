@@ -1,4 +1,4 @@
-/* Inherits most styles from SignIn.css */
+/* SignUp - Inherits from SignIn and adds password strength */
 @import './SignIn.css';
 
 .password-strength {
@@ -11,7 +11,7 @@
 .strength-bar {
     flex: 1;
     height: 6px;
-    background: #e0e0e0;
+    background: #E8E2D5;
     border-radius: 3px;
     overflow: hidden;
 }
@@ -24,17 +24,17 @@
 
 .strength-fill.strength-1 {
     width: 33%;
-    background: linear-gradient(90deg, #ff6b6b, #ee5a6f);
+    background: linear-gradient(90deg, #D6491A, #B8401A);
 }
 
 .strength-fill.strength-2 {
     width: 66%;
-    background: linear-gradient(90deg, #feca57, #ff9ff3);
+    background: linear-gradient(90deg, #C9A961, #D4B86A);
 }
 
 .strength-fill.strength-3 {
     width: 100%;
-    background: linear-gradient(90deg, #48dbfb, #0abde3);
+    background: linear-gradient(90deg, #48a965, #2d8a4e);
 }
 
 .strength-label {
@@ -44,15 +44,15 @@
 }
 
 .strength-fill.strength-1+.strength-label {
-    color: #ff6b6b;
+    color: #D6491A;
 }
 
 .strength-fill.strength-2+.strength-label {
-    color: #feca57;
+    color: #C9A961;
 }
 
 .strength-fill.strength-3+.strength-label {
-    color: #0abde3;
+    color: #2d8a4e;
 }
 
 .success-message {
@@ -81,12 +81,13 @@
 
 .success-message h2 {
     font-size: 1.5rem;
-    color: #1a1a1a;
+    color: var(--color-vintage-leather);
     margin: 0 0 0.5rem 0;
+    font-family: var(--font-serif);
 }
 
 .success-message p {
     font-size: 1rem;
-    color: #666;
+    color: var(--color-ink-light);
     margin: 0;
 }

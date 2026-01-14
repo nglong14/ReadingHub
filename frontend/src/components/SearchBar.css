@@ -1,6 +1,7 @@
+/* SearchBar - Vintage style */
 .search-bar-container {
     width: 100%;
-    padding: 2rem 2rem 2rem;
+    padding: 2rem;
 }
 
 .search-form {
@@ -14,16 +15,16 @@
     align-items: stretch;
     gap: 0;
     background: white;
-    border: 1px solid var(--goodreads-border);
+    border: 2px solid var(--color-parchment-cream);
     border-radius: 50px;
     overflow: hidden;
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--shadow-card);
     transition: all 0.2s ease;
 }
 
 .search-input-wrapper:focus-within {
-    border-color: var(--goodreads-orange);
-    box-shadow: 0 0 0 3px rgba(214, 73, 26, 0.1);
+    border-color: var(--color-accent-orange);
+    box-shadow: 0 0 0 3px rgba(214, 73, 26, 0.15);
 }
 
 .search-icon {
@@ -31,7 +32,7 @@
     padding: 0 1rem;
     display: flex;
     align-items: center;
-    color: var(--goodreads-text-light);
+    color: var(--color-ink-light);
 }
 
 .search-input {
@@ -39,14 +40,14 @@
     background: transparent;
     border: none;
     outline: none;
-    color: var(--goodreads-text);
+    color: var(--color-ink-dark);
     font-size: 1rem;
     padding: 0.875rem 0.5rem;
-    font-family: 'Lato', sans-serif;
+    font-family: var(--font-sans);
 }
 
 .search-input::placeholder {
-    color: var(--goodreads-text-light);
+    color: var(--color-ink-light);
 }
 
 .search-input:disabled {
@@ -55,20 +56,20 @@
 }
 
 .search-button {
-    background: var(--goodreads-orange);
     color: white;
     border: none;
     padding: 0.875rem 2rem;
     font-size: 1rem;
     font-weight: 700;
     cursor: pointer;
-    transition: background 0.2s ease;
+    transition: all 0.2s ease;
     white-space: nowrap;
-    font-family: 'Lato', sans-serif;
+    font-family: var(--font-sans);
+    background: linear-gradient(135deg, #D6491A 0%, #B8401A 100%);
 }
 
 .search-button:hover:not(:disabled) {
-    background: var(--goodreads-dark-orange);
+    background: linear-gradient(135deg, #B8401A 0%, #9A3615 100%);
 }
 
 .search-button:active:not(:disabled) {
@@ -95,9 +96,10 @@
     }
 }
 
+/* Responsive */
 @media (max-width: 768px) {
     .search-bar-container {
-        padding: 0 1rem 1.5rem;
+        padding: 1rem;
     }
 
     .search-input {

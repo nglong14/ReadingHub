@@ -1,21 +1,23 @@
+/* BookCarousel - Vintage style */
 .carousel-container {
-    background: white;
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lg);
+    border-radius: 12px;
     padding: 2rem;
     margin: 2rem;
     max-width: 900px;
     margin-left: auto;
     margin-right: auto;
+    background: linear-gradient(135deg, #FFF8F0 0%, #F9F7F4 100%);
+    border: 2px solid #E8E2D5;
+    box-shadow: 0 4px 20px rgba(56, 33, 16, 0.12);
 }
 
 .carousel-title {
     text-align: center;
     font-size: 1.25rem;
     font-weight: 600;
-    color: var(--goodreads-brown);
+    color: var(--color-vintage-leather);
     margin: 0 0 1.5rem;
-    font-family: 'Merriweather', Georgia, serif;
+    font-family: var(--font-serif);
 }
 
 .carousel-wrapper {
@@ -26,7 +28,7 @@
 }
 
 .carousel-nav-btn {
-    background: linear-gradient(135deg, var(--goodreads-brown) 0%, #5c4033 100%);
+    background: linear-gradient(135deg, #382110 0%, #5c4033 100%);
     color: white;
     border: none;
     border-radius: 50%;
@@ -65,16 +67,16 @@
     flex-shrink: 0;
     width: 250px;
     height: 375px;
-    border-radius: var(--radius-md);
+    border-radius: 4px;
     overflow: hidden;
-    box-shadow: var(--shadow-md);
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
     transition: transform 0.3s ease;
     position: relative;
 }
 
 .book-cover-wrapper:hover {
     transform: scale(1.05);
-    box-shadow: var(--shadow-lg);
+    box-shadow: 8px 8px 25px rgba(0, 0, 0, 0.35);
 }
 
 .carousel-book-cover {
@@ -87,12 +89,12 @@
 .carousel-book-placeholder {
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, var(--goodreads-beige) 0%, var(--goodreads-tan) 100%);
+    background: linear-gradient(135deg, #F9F7F4 0%, #F4F1EA 100%);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    color: var(--goodreads-text-light);
+    color: var(--color-ink-light);
 }
 
 .placeholder-icon {
@@ -110,15 +112,15 @@
 .carousel-book-title {
     font-size: 1.75rem;
     font-weight: 700;
-    color: var(--goodreads-brown);
+    color: var(--color-vintage-leather);
     margin: 0;
-    font-family: 'Merriweather', Georgia, serif;
+    font-family: var(--font-serif);
     line-height: 1.3;
 }
 
 .carousel-book-author {
     font-size: 1.1rem;
-    color: var(--goodreads-text-light);
+    color: var(--color-ink-light);
     margin: 0;
     font-style: italic;
 }
@@ -136,12 +138,12 @@
 
 .rating-value {
     font-weight: 600;
-    color: var(--goodreads-brown);
+    color: var(--color-vintage-leather);
 }
 
 .carousel-description {
     font-size: 0.95rem;
-    color: var(--goodreads-text);
+    color: var(--color-ink-dark);
     line-height: 1.6;
     margin: 0;
 }
@@ -158,7 +160,7 @@
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background: var(--goodreads-border);
+    background: #D8D8D8;
     border: none;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -166,15 +168,16 @@
 }
 
 .indicator-dot:hover {
-    background: var(--goodreads-text-light);
+    background: #767676;
     transform: scale(1.2);
 }
 
 .indicator-dot.active {
-    background: var(--goodreads-brown);
+    background: var(--color-vintage-leather);
     transform: scale(1.3);
 }
 
+/* Responsive */
 @media (max-width: 768px) {
     .carousel-container {
         padding: 1.5rem;
