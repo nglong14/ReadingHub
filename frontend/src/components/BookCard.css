@@ -1,14 +1,16 @@
+/* BookCard - Vintage parchment style */
 .book-card {
-    background: white;
-    border-radius: var(--radius-md);
+    border-radius: 8px;
     overflow: hidden;
-    transition: box-shadow 0.2s ease;
-    border: 1px solid var(--goodreads-border);
-    box-shadow: var(--shadow-sm);
+    transition: all 0.2s ease;
+    border: 2px solid #E8E2D5;
+    background: linear-gradient(135deg, #FFF8F0 0%, #F9F7F4 100%);
+    box-shadow: 0 2px 8px rgba(56, 33, 16, 0.1);
 }
 
 .book-card:hover {
-    box-shadow: var(--shadow-md);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(56, 33, 16, 0.15);
 }
 
 .book-card-inner {
@@ -21,10 +23,9 @@
     flex-shrink: 0;
     width: 120px;
     height: 180px;
-    background: var(--goodreads-tan);
-    border-radius: var(--radius-sm);
+    border-radius: 4px;
     overflow: hidden;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.25);
 }
 
 .book-thumbnail img {
@@ -41,7 +42,7 @@
     height: 100%;
     font-size: 3rem;
     background: linear-gradient(135deg, #E8E2D5 0%, #D8D2C5 100%);
-    color: var(--goodreads-text-light);
+    color: var(--color-ink-light);
 }
 
 .book-content {
@@ -55,20 +56,21 @@
 .book-title {
     font-size: 1.3rem;
     font-weight: 700;
-    color: var(--goodreads-brown);
+    color: var(--color-vintage-leather);
     margin: 0;
     line-height: 1.3;
-    font-family: 'Merriweather', Georgia, serif;
+    font-family: var(--font-serif);
     display: -webkit-box;
     -webkit-line-clamp: 2;
     line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    cursor: pointer;
+    transition: color 0.2s ease;
 }
 
 .book-title:hover {
-    color: var(--goodreads-orange);
-    cursor: pointer;
+    color: var(--color-accent-orange);
 }
 
 .book-authors {
@@ -76,12 +78,12 @@
     align-items: center;
     gap: 0.5rem;
     font-size: 0.95rem;
-    color: var(--goodreads-text);
+    color: var(--color-ink-dark);
     margin: 0;
 }
 
 .book-authors .icon {
-    color: var(--goodreads-text-light);
+    color: var(--color-ink-light);
 }
 
 .book-category {
@@ -89,7 +91,7 @@
     align-items: center;
     gap: 0.5rem;
     font-size: 0.875rem;
-    color: var(--goodreads-text-light);
+    color: var(--color-ink-light);
     margin: 0;
 }
 
@@ -102,13 +104,13 @@
     flex-wrap: wrap;
     gap: 1rem;
     padding: 0.5rem 0;
-    border-top: 1px solid var(--goodreads-border);
-    border-bottom: 1px solid var(--goodreads-border);
+    border-top: 1px solid #E8E2D5;
+    border-bottom: 1px solid #E8E2D5;
 }
 
 .meta-item {
     font-size: 0.875rem;
-    color: var(--goodreads-text);
+    color: var(--color-ink-dark);
     display: flex;
     align-items: center;
     gap: 0.3rem;
@@ -118,14 +120,14 @@
     display: flex;
     align-items: center;
     gap: 0.3rem;
-    color: var(--goodreads-star);
+    color: var(--color-accent-star);
     font-weight: 700;
 }
 
 .book-description {
     font-size: 0.95rem;
     line-height: 1.6;
-    color: var(--goodreads-text);
+    color: var(--color-ink-dark);
     margin: 0;
     flex: 1;
 }
@@ -142,24 +144,25 @@
     align-items: center;
     gap: 0.5rem;
     padding: 0.5rem 0.75rem;
-    background: var(--goodreads-tan);
-    border-radius: var(--radius-sm);
+    border-radius: 4px;
     margin-top: 0.5rem;
     align-self: flex-start;
+    background: linear-gradient(135deg, #F4F1EA 0%, #E8E2D5 100%);
 }
 
 .score-label {
     font-size: 0.875rem;
-    color: var(--goodreads-text-light);
+    color: var(--color-ink-light);
     font-weight: 400;
 }
 
 .score-value {
     font-size: 1rem;
     font-weight: 700;
-    color: var(--goodreads-orange);
+    color: var(--color-accent-orange);
 }
 
+/* Responsive */
 @media (max-width: 768px) {
     .book-card-inner {
         flex-direction: column;

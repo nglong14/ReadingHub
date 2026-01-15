@@ -1,0 +1,93 @@
+/* SignUp - Inherits from SignIn and adds password strength */
+@import './SignIn.css';
+
+.password-strength {
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.strength-bar {
+    flex: 1;
+    height: 6px;
+    background: #E8E2D5;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.strength-fill {
+    height: 100%;
+    transition: all 0.3s ease;
+    border-radius: 3px;
+}
+
+.strength-fill.strength-1 {
+    width: 33%;
+    background: linear-gradient(90deg, #D6491A, #B8401A);
+}
+
+.strength-fill.strength-2 {
+    width: 66%;
+    background: linear-gradient(90deg, #C9A961, #D4B86A);
+}
+
+.strength-fill.strength-3 {
+    width: 100%;
+    background: linear-gradient(90deg, #48a965, #2d8a4e);
+}
+
+.strength-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    min-width: 60px;
+}
+
+.strength-fill.strength-1+.strength-label {
+    color: #D6491A;
+}
+
+.strength-fill.strength-2+.strength-label {
+    color: #C9A961;
+}
+
+.strength-fill.strength-3+.strength-label {
+    color: #2d8a4e;
+}
+
+.success-message {
+    text-align: center;
+    padding: 2rem;
+}
+
+.success-icon {
+    font-size: 4rem;
+    display: block;
+    margin-bottom: 1rem;
+    animation: scaleIn 0.5s ease;
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.success-message h2 {
+    font-size: 1.5rem;
+    color: var(--color-vintage-leather);
+    margin: 0 0 0.5rem 0;
+    font-family: var(--font-serif);
+}
+
+.success-message p {
+    font-size: 1rem;
+    color: var(--color-ink-light);
+    margin: 0;
+}
