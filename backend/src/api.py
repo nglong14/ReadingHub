@@ -37,7 +37,7 @@ async def load_resources():
     global db_books, embedding, books_df
 
     qdrant_storage_path = "../qdrant_storage"
-    models_cache_path = "../models"
+    models_cache_path = "../../models"
     
     # Fetch all books data from Supabase using pagination
     # Supabase has a default limit of 1000, so we need to paginate

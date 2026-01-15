@@ -17,7 +17,6 @@ function Navbar() {
         <nav className="navbar">
             <div className="navbar-container">
                 <Link to="/" className="navbar-brand">
-                    <span className="navbar-icon">📚</span>
                     <h1 className="navbar-title">Book Recommendation</h1>
                 </Link>
 

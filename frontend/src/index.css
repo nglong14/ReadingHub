@@ -2,30 +2,35 @@
 
 /* Custom theme configuration for Tailwind v4 */
 @theme {
-  /* Vintage primary browns */
-  --color-vintage-leather: #382110;
-  --color-vintage-leather-light: #5c4033;
-  --color-vintage-leather-dark: #2a1810;
-  --color-vintage-mahogany: #4a3728;
+  /* Bookstore primary browns */
+  --color-vintage-leather: #3D2317;
+  --color-vintage-leather-light: #6B4423;
+  --color-vintage-leather-dark: #2D1A10;
+  --color-vintage-mahogany: #523A28;
+  --color-walnut: #5D4037;
+  --color-espresso: #4E342E;
 
-  /* Cream and beige backgrounds */
-  --color-parchment-light: #FFF8F0;
-  --color-parchment: #F9F7F4;
-  --color-parchment-dark: #F4F1EA;
-  --color-parchment-cream: #E8E2D5;
+  /* Warm cream and sepia backgrounds */
+  --color-parchment-light: #FBF6EF;
+  --color-parchment: #F5EDE0;
+  --color-parchment-dark: #EDE4D3;
+  --color-parchment-cream: #DDD3C1;
+  --color-sepia: #D4C4A8;
 
-  /* Accent colors */
-  --color-accent-orange: #D6491A;
-  --color-accent-orange-dark: #B8401A;
-  --color-accent-gold: #C9A961;
-  --color-accent-gold-light: #D4B86A;
-  --color-accent-star: #EE8A00;
+  /* Bookstore accent colors - warm burgundy and gold */
+  --color-accent-orange: #8B3A3A;
+  --color-accent-orange-dark: #6D2C2C;
+  --color-accent-gold: #B8860B;
+  --color-accent-gold-light: #D4A84B;
+  --color-accent-star: #DAA520;
+  --color-burgundy: #722F37;
+  --color-copper: #B87333;
 
-  /* Text colors */
-  --color-ink-dark: #333333;
-  --color-ink-medium: #4a4a4a;
-  --color-ink-light: #767676;
-  --color-ink-muted: #999999;
+  /* Text colors - warmer tones */
+  --color-ink-dark: #2C2416;
+  --color-ink-medium: #4A3F31;
+  --color-ink-light: #6B5D4D;
+  --color-ink-muted: #8B7D6B;
 
   /* Fonts */
   --font-serif: 'Merriweather', Georgia, serif;
@@ -171,7 +176,7 @@
 
   /* Leather texture gradient */
   .bg-leather {
-    background: linear-gradient(135deg, #382110 0%, #5c4033 50%, #4a3728 100%);
+    background: linear-gradient(135deg, #3D2317 0%, #5D4037 40%, #4E342E 70%, #3D2317 100%);
   }
 
   /* Parchment background */
