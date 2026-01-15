@@ -8,6 +8,7 @@ from langchain_qdrant import QdrantVectorStore
 from qdrant_client import QdrantClient
 from dotenv import load_dotenv
 from supabase import create_client, Client
+from utils.cache import CachedSearch
 
 load_dotenv()
 
@@ -31,16 +32,17 @@ app.add_middleware(
 db_books = None 
 embedding = None
 books_df = None
+search_cache = None
 
 @app.on_event("startup")
 async def load_resources():
-    global db_books, embedding, books_df
+    global db_books, embedding, books_df, search_cache
 
     qdrant_storage_path = "../qdrant_storage"
     models_cache_path = "../../models"
     
     # Fetch all books data from Supabase using pagination
-    # Supabase has a default limit of 1000, so we need to paginate
+    # Supabase has a default limit of 1000
     books_data = []
     page_size = 1000
     offset = 0
@@ -82,6 +84,9 @@ async def load_resources():
     books_df = pd.DataFrame(books_data)
     print(books_df.shape)
 
+    # Initialize Redis cache
+    search_cache = CachedSearch()
+
 @app.get("/")
 async def root():
     return {"message": "Book Recommendation API is running"}
@@ -96,6 +101,15 @@ async def search_books(request: SearchRequest):
         raise HTTPException(status_code=503, detail="Resources not loaded")
     #Handle request query 
     try:
+        params = {"top_k": request.top_k}
+        cached_results = search_cache.get(request.query, params)
+
+        if cached_results:
+            return SearchResponse(
+                results=[BookResponse(**r) for r in cached_results],
+                total=len(cached_results)
+            )
+
         docs_with_scores = db_books.similarity_search_with_score(request.query, k=request.top_k)
         results = []
         for doc, score in docs_with_scores:
@@ -128,6 +142,8 @@ async def search_books(request: SearchRequest):
             except (ValueError, IndexError):
                 continue
         
+        # Cache the results before returning
+        search_cache.set(request.query, params, [r.model_dump() for r in results])
         return SearchResponse(results=results, total=len(results))
     
     except Exception as e:
