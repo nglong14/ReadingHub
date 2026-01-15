@@ -54,7 +54,7 @@ async def load_resources():
             break
         offset += page_size
     
-    print(f"Fetched {len(books_data)} books from Supabase")
+    # print(f"Fetched {len(books_data)} books from Supabase")
 
     if not os.path.exists(qdrant_storage_path):
         raise FileNotFoundError(f"Qdrant storage not found at {qdrant_storage_path}")
