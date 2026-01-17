@@ -35,3 +35,27 @@ export const checkHealth = async () => {
         throw error;
     }
 };
+
+export const createBook = async (bookData, accessToken) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/create`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`,
+            },
+            body: JSON.stringify(bookData),
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error creating book:', error);
+        throw error;
+    }
+};
