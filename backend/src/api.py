@@ -1,7 +1,7 @@
 import os
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends, Header
 from fastapi.middleware.cors import CORSMiddleware
-from models import SearchRequest, SearchResponse, BookResponse
+from models import SearchRequest, SearchResponse, BookResponse, CreateBook, CreateBookResponse
 import pandas as pd
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_qdrant import QdrantVectorStore
@@ -148,3 +148,22 @@ async def search_books(request: SearchRequest):
     
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Search failed: {str(e)}")
+
+async def get_current_user(authorization: str = Header(...)):
+    try:
+        token = authorization.replace("Bearer ", "")
+        user_response = supabase.auth.get_user(token)
+        return user_response.user
+    except Exception as e:
+        raise HTTPException(status_code=401, detail=f"Invalid token: {str(e)}")
+
+@app.post("/create", response_model=CreateBookResponse)
+def create_book(book: CreateBook, user = Depends(get_current_user)):
+    try:
+        book_data = book.model_dump()
+        book_data["created_by"] = user.id
+        book_data["tagged_description"] = f"{book_data['isbn13']} {book_data['description']}"
+        supabase.table("books").insert(book_data).execute()
+        return CreateBookResponse(**book_data)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Create book failed: {str(e)}")
