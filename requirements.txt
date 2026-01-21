@@ -7,3 +7,5 @@ langchain-text-splitters
 qdrant-client
 langchain-qdrant
 pydantic
+supabase
+sentence-transformers

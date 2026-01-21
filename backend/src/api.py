@@ -162,6 +162,7 @@ def create_book(book: CreateBook, user = Depends(get_current_user)):
     try:
         book_data = book.model_dump()
         book_data["created_by"] = user.id
+        book_data["tagged_description"] = f"{book_data['isbn13']} {book_data['description']}"
         supabase.table("books").insert(book_data).execute()
         return CreateBookResponse(**book_data)
     except Exception as e:
