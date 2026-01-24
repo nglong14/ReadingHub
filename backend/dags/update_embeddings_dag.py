@@ -22,10 +22,6 @@ supabase: Client = create_client(os.getenv("SUPABASE_URL"), os.getenv("SUPABASE_
     tags=["embeddings", "books"],
 )
 def update_embeddings_dag():
-    """
-    ETL pipeline to generate and store embeddings for new books
-    """
-    
     @task()
     def extract() -> List[Dict]:
         """Extract books with needs_embedding=True from Supabase"""
@@ -49,7 +45,6 @@ def update_embeddings_dag():
     
     @task()
     def load(embedded_books: List[Dict]) -> None:
-        """Load embeddings to Qdrant and mark books as processed"""
         if not embedded_books:
             print("No embeddings to load")
             return
@@ -79,7 +74,6 @@ def update_embeddings_dag():
         
         # Add texts to existing collection
         vector_store.add_texts(texts)
-        print(f"Added {len(texts)} embeddings to Qdrant")
         
         # Mark books as processed in Supabase
         for isbn in isbn_list:
