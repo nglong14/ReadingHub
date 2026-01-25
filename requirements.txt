@@ -9,3 +9,6 @@ langchain-qdrant
 pydantic
 supabase
 sentence-transformers
+httpx
+redis
+python-dotenv
