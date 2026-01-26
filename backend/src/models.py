@@ -28,3 +28,28 @@ class BookResponse(BaseModel):
 class SearchResponse(BaseModel):
     results: List[BookResponse]
     total: int
+
+class CreateBook(BaseModel):
+    isbn13: int
+    title: Optional[str]
+    authors: Optional[str]
+    categories: Optional[str]
+    description: str
+    thumbnail: Optional[str] = None
+    average_rating: Optional[float] = None
+    num_pages: Optional[int] = None
+    published_year: Optional[int] = None
+    created_by: Optional[str] = None
+    needs_embedding: bool = True
+
+class CreateBookResponse(BaseModel):
+    isbn13: int
+    title: Optional[str]
+    authors: Optional[str]
+    categories: Optional[str]
+    description: str
+    thumbnail: Optional[str] = None
+    average_rating: Optional[float] = None
+    num_pages: Optional[int] = None
+    published_year: Optional[int] = None
+    created_by: Optional[str] = None

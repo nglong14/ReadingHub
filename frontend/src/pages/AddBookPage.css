@@ -1,0 +1,308 @@
+/* AddBookPage - Vintage style matching AuthPage */
+.add-book-page {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #382110 0%, #5c4033 50%, #4a3728 100%);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.add-book-container {
+    width: 100%;
+    max-width: 700px;
+    padding-top: 2rem;
+}
+
+.add-book-header {
+    margin-bottom: 2rem;
+}
+
+.add-book-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: white;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.add-book-back-link:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateX(-4px);
+}
+
+.back-arrow {
+    font-size: 1.2rem;
+    transition: transform 0.3s ease;
+}
+
+.add-book-back-link:hover .back-arrow {
+    transform: translateX(-4px);
+}
+
+.add-book-form-wrapper {
+    background: linear-gradient(180deg, #FFF8F0 0%, #F9F7F4 100%);
+    border-radius: 24px;
+    border: 2px solid #E8E2D5;
+    box-shadow: 0 20px 60px rgba(56, 33, 16, 0.35);
+    animation: slideUp 0.5s ease;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.add-book-form {
+    padding: 2.5rem;
+}
+
+.add-book-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-vintage-leather, #382110);
+    margin: 0 0 0.5rem 0;
+    text-align: center;
+    font-family: var(--font-serif, 'Merriweather', Georgia, serif);
+}
+
+.add-book-subtitle {
+    font-size: 1rem;
+    color: var(--color-ink-light, #767676);
+    margin: 0 0 2rem 0;
+    text-align: center;
+}
+
+/* Form Layout */
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.form-row.three-cols {
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group.full-width {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-vintage-leather, #382110);
+    margin-bottom: 0.5rem;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    font-size: 1rem;
+    border: 2px solid #E8E2D5;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    background: #F8F9FA;
+    font-family: inherit;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--color-accent-orange, #8B3A3A);
+    background: white;
+    box-shadow: 0 0 0 4px rgba(139, 58, 58, 0.1);
+}
+
+.form-group input:disabled,
+.form-group textarea:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Error Message */
+.add-book-error {
+    background: linear-gradient(135deg, #8B3A3A 0%, #6D2C2C 100%);
+    color: white;
+    padding: 1rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 12px rgba(139, 58, 58, 0.25);
+}
+
+.error-icon {
+    font-size: 1.2rem;
+}
+
+/* Submit Button */
+.add-book-submit-btn {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: white;
+    background: linear-gradient(135deg, #382110 0%, #5c4033 100%);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    box-shadow: 0 4px 15px rgba(56, 33, 16, 0.3);
+    margin-top: 1rem;
+}
+
+.add-book-submit-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(56, 33, 16, 0.4);
+}
+
+.add-book-submit-btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.add-book-submit-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.btn-icon {
+    font-size: 1.2rem;
+}
+
+.loading-spinner {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Success State */
+.add-book-success {
+    padding: 3rem;
+    text-align: center;
+}
+
+.success-icon {
+    font-size: 4rem;
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.add-book-success h2 {
+    font-size: 1.75rem;
+    color: var(--color-vintage-leather, #382110);
+    margin: 0 0 0.5rem 0;
+    font-family: var(--font-serif, 'Merriweather', Georgia, serif);
+}
+
+.add-book-success p {
+    color: var(--color-ink-light, #767676);
+    font-size: 1rem;
+    margin: 0 0 2rem 0;
+}
+
+.add-another-btn {
+    padding: 0.875rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: white;
+    background: linear-gradient(135deg, #382110 0%, #5c4033 100%);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(56, 33, 16, 0.3);
+}
+
+.add-another-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(56, 33, 16, 0.4);
+}
+
+/* Loading State */
+.add-book-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 50vh;
+    color: white;
+}
+
+.loading-spinner-large {
+    font-size: 3rem;
+    animation: spin 1.5s linear infinite;
+}
+
+.add-book-loading p {
+    margin-top: 1rem;
+    font-size: 1.1rem;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 600px) {
+    .add-book-page {
+        padding: 1rem;
+    }
+
+    .add-book-container {
+        padding-top: 1rem;
+    }
+
+    .add-book-form {
+        padding: 1.5rem;
+    }
+
+    .add-book-title {
+        font-size: 1.5rem;
+    }
+
+    .form-row,
+    .form-row.three-cols {
+        grid-template-columns: 1fr;
+    }
+
+    .add-book-header {
+        margin-bottom: 1.5rem;
+    }
+}

@@ -46,6 +46,29 @@
     gap: 1rem;
 }
 
+.navbar-link {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50px;
+    transition: all 0.3s ease;
+}
+
+.navbar-link:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.nav-icon {
+    font-size: 1rem;
+}
+
 .navbar-user {
     display: flex;
     align-items: center;

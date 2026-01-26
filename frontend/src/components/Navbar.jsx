@@ -21,6 +21,18 @@ function Navbar() {
                 </Link>
 
                 <div className="navbar-actions">
+                    <Link to="/" className="navbar-link">
+                        <span className="nav-icon">🏠</span>
+                        Home
+                    </Link>
+
+                    {user && (
+                        <Link to="/add-book" className="navbar-link">
+                            <span className="nav-icon">📚</span>
+                            Add Book
+                        </Link>
+                    )}
+
                     {loading ? (
                         <div className="navbar-loading">
                             <span className="loading-spinner">⏳</span>

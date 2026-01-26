@@ -1,14 +1,15 @@
 import os
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends, Header
 from fastapi.middleware.cors import CORSMiddleware
-from models import SearchRequest, SearchResponse, BookResponse
+from models import SearchRequest, SearchResponse, BookResponse, CreateBook, CreateBookResponse
 import pandas as pd
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_qdrant import QdrantVectorStore
 from qdrant_client import QdrantClient
 from dotenv import load_dotenv
 from supabase import create_client, Client
-from utils.cache import CachedSearch
+from supabase._async.client import AsyncClient, create_client as async_create_client
+from utils.cache import CachedSearch, EmbeddingCache
 
 load_dotenv()
 
@@ -18,7 +19,7 @@ app = FastAPI(
     version="1.0.0"
 )
 
-supabase: Client = create_client(os.getenv("SUPABASE_URL"), os.getenv("SUPABASE_KEY"))
+supabase: AsyncClient = None
 
 # Add CORS middleware
 app.add_middleware(
@@ -33,10 +34,14 @@ db_books = None
 embedding = None
 books_df = None
 search_cache = None
+embedding_cache = None
 
 @app.on_event("startup")
 async def load_resources():
-    global db_books, embedding, books_df, search_cache
+    global db_books, embedding, books_df, search_cache, embedding_cache, supabase
+
+    # Initialize async Supabase client
+    supabase = await async_create_client(os.getenv("SUPABASE_URL"), os.getenv("SUPABASE_KEY"))
 
     qdrant_storage_path = "../qdrant_storage"
     models_cache_path = "../../models"
@@ -48,7 +53,7 @@ async def load_resources():
     offset = 0
     
     while True:
-        response = supabase.table("books").select("*").range(offset, offset + page_size - 1).execute()
+        response = await supabase.table("books").select("*").range(offset, offset + page_size - 1).execute()
         if not response.data:
             break
         books_data.extend(response.data)
@@ -84,8 +89,9 @@ async def load_resources():
     books_df = pd.DataFrame(books_data)
     print(books_df.shape)
 
-    # Initialize Redis cache
+    # Initialize Redis caches
     search_cache = CachedSearch()
+    embedding_cache = EmbeddingCache()
 
 @app.get("/")
 async def root():
@@ -110,7 +116,15 @@ async def search_books(request: SearchRequest):
                 total=len(cached_results)
             )
 
-        docs_with_scores = db_books.similarity_search_with_score(request.query, k=request.top_k)
+        # Check for cached embedding first
+        query_embedding = embedding_cache.get(request.query)
+        if query_embedding is None:
+            # Generate and cache the embedding
+            query_embedding = embedding.embed_query(request.query)
+            embedding_cache.set(request.query, query_embedding)
+        
+        # Use the embedding for vector search
+        docs_with_scores = db_books.similarity_search_by_vector_with_score(query_embedding, k=request.top_k)
         results = []
         for doc, score in docs_with_scores:
             isbn_str = doc.page_content.strip('"').split()[0]
@@ -148,3 +162,22 @@ async def search_books(request: SearchRequest):
     
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Search failed: {str(e)}")
+
+async def get_current_user(authorization: str = Header(...)):
+    try:
+        token = authorization.replace("Bearer ", "")
+        user_response = await supabase.auth.get_user(token)
+        return user_response.user
+    except Exception as e:
+        raise HTTPException(status_code=401, detail=f"Invalid token: {str(e)}")
+
+@app.post("/create", response_model=CreateBookResponse)
+async def create_book(book: CreateBook, user = Depends(get_current_user)):
+    try:
+        book_data = book.model_dump()
+        book_data["created_by"] = user.id
+        book_data["tagged_description"] = f"{book_data['isbn13']} {book_data['description']}"
+        await supabase.table("books").insert(book_data).execute()
+        return CreateBookResponse(**book_data)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Create book failed: {str(e)}")
