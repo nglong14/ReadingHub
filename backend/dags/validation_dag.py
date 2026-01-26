@@ -1,16 +1,22 @@
 import os
 import pendulum
 from typing import List, Dict
-from supabase import create_client, Client
 from airflow.sdk import dag, task
 from dotenv import load_dotenv
-from qdrant_client import QdrantClient
 
-load_dotenv("/mnt/d/BookRecommendation/.env")
 
-# Initialize clients
-supabase: Client = create_client(os.getenv("SUPABASE_URL"), os.getenv("SUPABASE_KEY"))
-qdrant_client = QdrantClient(path="/mnt/d/BookRecommendation/backend/qdrant_storage")
+def get_supabase_client():
+    """Create and return a Supabase client."""
+    from supabase import create_client
+    load_dotenv("/mnt/d/BookRecommendation/.env")
+    return create_client(os.getenv("SUPABASE_URL"), os.getenv("SUPABASE_KEY"))
+
+
+def get_qdrant_client():
+    """Create and return a Qdrant client."""
+    from qdrant_client import QdrantClient
+    return QdrantClient(path="/mnt/d/BookRecommendation/backend/qdrant_storage")
+
 
 @dag(
     schedule="@weekly",
@@ -21,21 +27,16 @@ qdrant_client = QdrantClient(path="/mnt/d/BookRecommendation/backend/qdrant_stor
 def validation_dag():
     
     @task()
-    def count_supabase_books() -> int:
-        response = supabase.table("books").select("isbn13", count="exact").execute()
-        count = response.count or 0
+    def get_supabase_data() -> Dict:
+        """Get both count and ISBNs from Supabase in a single task."""
+        supabase = get_supabase_client()
+        
+        # Get count
+        count_response = supabase.table("books").select("isbn13", count="exact").execute()
+        count = count_response.count or 0
         print(f"Supabase books count: {count}")
-        return count
-    
-    @task()
-    def count_qdrant_vectors() -> int:
-        collection_info = qdrant_client.get_collection("books")
-        count = collection_info.points_count
-        print(f"Qdrant vectors count: {count}")
-        return count
-    
-    @task()
-    def get_supabase_isbns() -> List[int]:
+        
+        # Get all ISBNs
         isbns = []
         page_size = 1000
         offset = 0
@@ -49,10 +50,19 @@ def validation_dag():
                 break
             offset += page_size
         
-        return isbns
+        return {"count": count, "isbns": isbns}
     
     @task()
-    def get_qdrant_isbns() -> List[int]:
+    def get_qdrant_data() -> Dict:
+        """Get both count and ISBNs from Qdrant in a single task to avoid storage locking."""
+        qdrant_client = get_qdrant_client()
+        
+        # Get count
+        collection_info = qdrant_client.get_collection("books")
+        count = collection_info.points_count
+        print(f"Qdrant vectors count: {count}")
+        
+        # Get all ISBNs
         isbns = []
         offset = None
         
@@ -76,7 +86,7 @@ def validation_dag():
             if offset is None:
                 break
         
-        return isbns
+        return {"count": count, "isbns": isbns}
     
     @task()
     def find_discrepancies(supabase_isbns: List[int], qdrant_isbns: List[int]) -> Dict:
@@ -125,12 +135,12 @@ def validation_dag():
         
         return report
 
-    # Task dependencies
-    supabase_count = count_supabase_books()
-    qdrant_count = count_qdrant_vectors()
-    supabase_isbns = get_supabase_isbns()
-    qdrant_isbns = get_qdrant_isbns()
-    discrepancies = find_discrepancies(supabase_isbns, qdrant_isbns)
-    generate_report(supabase_count, qdrant_count, discrepancies)
+    # Task dependencies - Supabase and Qdrant tasks can run in parallel
+    # but each source's operations are now in a single task to avoid locking
+    supabase_data = get_supabase_data()
+    qdrant_data = get_qdrant_data()
+    
+    discrepancies = find_discrepancies(supabase_data["isbns"], qdrant_data["isbns"])
+    generate_report(supabase_data["count"], qdrant_data["count"], discrepancies)
 
 validation_dag()
