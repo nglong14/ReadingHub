@@ -76,7 +76,7 @@ function HomePage() {
                 {!hasSearched && (
                     <div className="welcome-message">
                         <div className="welcome-icon">✨</div>
-                        <h2>Welcome to Book Recommendation</h2>
+                        <h2>Welcome to ReadingHub</h2>
                         <p>Search for books and discover emotional insights</p>
                     </div>
                 )}

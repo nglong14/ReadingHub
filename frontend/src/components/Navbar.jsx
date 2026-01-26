@@ -17,7 +17,7 @@ function Navbar() {
         <nav className="navbar">
             <div className="navbar-container">
                 <Link to="/" className="navbar-brand">
-                    <h1 className="navbar-title">Book Recommendation</h1>
+                    <h1 className="navbar-title">ReadingHub</h1>
                 </Link>
 
                 <div className="navbar-actions">
