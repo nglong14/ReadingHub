@@ -34,3 +34,12 @@ pip-delete-this-directory.txt
 # Environment variables and secrets
 .env
 .aws
+
+# Models (will download at runtime)
+models/
+
+# Local Qdrant storage (using Qdrant Cloud in production)
+qdrant_storage/
+
+# Airflow DAGs (running locally, not in Cloud Run)
+dags/

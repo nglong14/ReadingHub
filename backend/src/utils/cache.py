@@ -1,12 +1,19 @@
+import os
 import redis
 import hashlib
 import json
 import numpy as np
 from typing import Optional, List
 
+# Read Redis config from environment (for Cloud deployment)
+REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
+REDIS_PORT = int(os.getenv("REDIS_PORT", "6379"))
+
 class EmbeddingCache:
     
-    def __init__(self, host='localhost', port=6379, ttl=86400):
+    def __init__(self, host=None, port=None, ttl=86400):
+        host = host or REDIS_HOST
+        port = port or REDIS_PORT
         self.redis_client = redis.Redis(host=host, port=port, decode_responses=False)
         self.ttl = ttl
     
@@ -37,9 +44,11 @@ class EmbeddingCache:
 
 
 class CachedSearch():
-    def __init__(self, host='localhost', port=6379, ttl=3600):
+    def __init__(self, host=None, port=None, ttl=3600):
         #Initialize
-        self.redis_client = redis.Redis(host = host, port = port, decode_responses=True)
+        host = host or REDIS_HOST
+        port = port or REDIS_PORT
+        self.redis_client = redis.Redis(host=host, port=port, decode_responses=True)
         self.ttl = ttl
     
     def _generate_key(self, query: str, params: dict) -> str:

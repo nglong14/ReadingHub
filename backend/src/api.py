@@ -42,8 +42,6 @@ async def load_resources():
 
     # Initialize async Supabase client
     supabase = await async_create_client(os.getenv("SUPABASE_URL"), os.getenv("SUPABASE_KEY"))
-
-    models_cache_path = "../../models"
     
     # Fetch all books data from Supabase using pagination
     # Supabase has a default limit of 1000
@@ -62,12 +60,9 @@ async def load_resources():
     
     # print(f"Fetched {len(books_data)} books from Supabase")
 
-    if not os.path.exists(models_cache_path):
-        raise FileNotFoundError(f"Models cache not found at {models_cache_path}")
-    
+    # HuggingFace will auto-download model to default cache if not present
     embedding = HuggingFaceEmbeddings(
         model_name="all-MiniLM-L6-v2",
-        cache_folder=models_cache_path,
         model_kwargs={'device': 'cpu'},
         encode_kwargs={'normalize_embeddings': True}
     )
