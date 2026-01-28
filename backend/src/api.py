@@ -24,7 +24,7 @@ supabase: AsyncClient = None
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173", "https://reading-hub-swart.vercel.app"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -43,7 +43,6 @@ async def load_resources():
     # Initialize async Supabase client
     supabase = await async_create_client(os.getenv("SUPABASE_URL"), os.getenv("SUPABASE_KEY"))
 
-    qdrant_storage_path = "../qdrant_storage"
     models_cache_path = "../../models"
     
     # Fetch all books data from Supabase using pagination
@@ -63,9 +62,6 @@ async def load_resources():
     
     # print(f"Fetched {len(books_data)} books from Supabase")
 
-    if not os.path.exists(qdrant_storage_path):
-        raise FileNotFoundError(f"Qdrant storage not found at {qdrant_storage_path}")
-    
     if not os.path.exists(models_cache_path):
         raise FileNotFoundError(f"Models cache not found at {models_cache_path}")
     
@@ -76,8 +72,11 @@ async def load_resources():
         encode_kwargs={'normalize_embeddings': True}
     )
 
-    # Initialize Qdrant client and load collection
-    client = QdrantClient(path=qdrant_storage_path)
+    # Initialize Qdrant Cloud client
+    client = QdrantClient(
+        url=os.getenv("QDRANT_URL"),
+        api_key=os.getenv("QDRANT_API_KEY"),
+    )
     
     db_books = QdrantVectorStore(
         client=client,
@@ -124,7 +123,7 @@ async def search_books(request: SearchRequest):
             embedding_cache.set(request.query, query_embedding)
         
         # Use the embedding for vector search
-        docs_with_scores = db_books.similarity_search_by_vector_with_score(query_embedding, k=request.top_k)
+        docs_with_scores = db_books.similarity_search_with_score_by_vector(query_embedding, k=request.top_k)
         results = []
         for doc, score in docs_with_scores:
             isbn_str = doc.page_content.strip('"').split()[0]

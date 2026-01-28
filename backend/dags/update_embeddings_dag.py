@@ -16,7 +16,7 @@ load_dotenv("/mnt/d/BookRecommendation/.env")
 supabase: Client = create_client(os.getenv("SUPABASE_URL"), os.getenv("SUPABASE_KEY"))
 
 @dag(
-    schedule="@daily",
+    schedule="@weekly",
     start_date=pendulum.datetime(2025, 1, 21, tz="UTC"),
     catchup=False,
     tags=["embeddings", "books"],
@@ -57,11 +57,14 @@ def update_embeddings_dag():
             encode_kwargs={'normalize_embeddings': True}
         )
         
-        # Initialize Qdrant client
+        # Initialize Qdrant Cloud client
         from langchain_qdrant import QdrantVectorStore
-        qdrant_client = QdrantClient(path="/mnt/d/BookRecommendation/backend/qdrant_storage")
+        qdrant_client = QdrantClient(
+            url=os.getenv("QDRANT_URL"),
+            api_key=os.getenv("QDRANT_API_KEY"),
+        )
         
-        # Connect to existing vector store
+        # Connect to existing vector store on cloud
         vector_store = QdrantVectorStore(
             client=qdrant_client,
             collection_name="books",

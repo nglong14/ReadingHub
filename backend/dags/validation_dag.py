@@ -13,13 +13,17 @@ def get_supabase_client():
 
 
 def get_qdrant_client():
-    """Create and return a Qdrant client."""
+    """Create and return a Qdrant Cloud client."""
     from qdrant_client import QdrantClient
-    return QdrantClient(path="/mnt/d/BookRecommendation/backend/qdrant_storage")
+    load_dotenv("/mnt/d/BookRecommendation/.env")
+    return QdrantClient(
+        url=os.getenv("QDRANT_URL"),
+        api_key=os.getenv("QDRANT_API_KEY"),
+    )
 
 
 @dag(
-    schedule="@weekly",
+    schedule="@monthly",
     start_date=pendulum.datetime(2025, 1, 21, tz="UTC"),
     catchup=False,
     tags=["validation", "books", "health-check"],

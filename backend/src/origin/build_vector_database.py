@@ -2,13 +2,20 @@ import pandas as pd
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_qdrant import QdrantVectorStore
 from qdrant_client import QdrantClient
+from qdrant_client.models import Distance, VectorParams
 from langchain_community.document_loaders import TextLoader
 from langchain_text_splitters import CharacterTextSplitter
 import os
+from dotenv import load_dotenv
 
-# Create necessary directories
-os.makedirs("./qdrant_storage", exist_ok=True)
+load_dotenv()
+
+# Create models directory
 os.makedirs("./models", exist_ok=True)
+
+# Qdrant Cloud configuration
+QDRANT_URL = os.getenv("QDRANT_URL")
+QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
 
 #Load data
 books = pd.read_csv("../notebooks/books_with_emotions.csv")
@@ -31,11 +38,18 @@ embedding = HuggingFaceEmbeddings(
         encode_kwargs={'normalize_embeddings': True}  # Better similarity scores
     )
 
-#Build Qdrant vector store
+# Initialize Qdrant Cloud client
+qdrant_client = QdrantClient(
+    url=QDRANT_URL,
+    api_key=QDRANT_API_KEY,
+)
+
+#Build Qdrant vector store on cloud
 db_books = QdrantVectorStore.from_documents(
         documents,
         embedding,
-        path="./qdrant_storage",
+        url=QDRANT_URL,
+        api_key=QDRANT_API_KEY,
         collection_name="books",
         force_recreate=True
     )
