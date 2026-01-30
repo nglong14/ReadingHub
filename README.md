@@ -1,4 +1,4 @@
-# Book Recommendation System
+# ReadingHub
 
 ## Overview
 This project is a full-stack book recommendation engine that leverages semantic search to help users find books based on natural language queries. It combines a modern React frontend with a robust FastAPI backend, utilizing vector embeddings for intelligent search results.
@@ -37,7 +37,8 @@ This project is a full-stack book recommendation engine that leverages semantic 
 - Python 3.11+
 - Node.js & npm
 - Docker (optional, for containerization)
-- Redis server (for caching)
+- Redis server (running locally or remotely)
+- Apache Airflow (for pipeline orchestration)
 - Supabase account
 - Qdrant account
 
@@ -49,10 +50,18 @@ This project is a full-stack book recommendation engine that leverages semantic 
    pip install -r requirements.txt
    ```
 4. Configure environment variables in a `.env` file (refer to `.env.example`).
+   - Ensure `REDIS_HOST` and `REDIS_PORT` are set correctly.
 5. Run the server:
    ```bash
    uvicorn src.api:app --reload
    ```
+
+### Airflow Pipeline Setup
+1. Ensure your Airflow environment is active.
+2. Point Airflow to the `backend/dags` directory.
+3. Available DAGs:
+   - `update_embeddings_dag`: Updates vector embeddings for new books.
+   - `validation_dag`: Validates system integrity and data consistency.
 
 ### Frontend Setup
 1. Navigate to the `frontend` directory.
