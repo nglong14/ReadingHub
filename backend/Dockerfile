@@ -7,6 +7,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . /app
 
+# Set working directory to src so imports work correctly
+WORKDIR /app/src
+
 ENV PORT=8080
 
-CMD uvicorn src.api:app --host 0.0.0.0 --port $PORT
+CMD uvicorn api:app --host 0.0.0.0 --port $PORT
