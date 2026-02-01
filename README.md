@@ -1,4 +1,4 @@
-# Book Recommendation System
+# ReadingHub
 
 ## Overview
 This project is a full-stack book recommendation engine that leverages semantic search to help users find books based on natural language queries. It combines a modern React frontend with a robust FastAPI backend, utilizing vector embeddings for intelligent search results.
