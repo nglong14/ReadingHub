@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:8000';
+const API_BASE_URL = 'https://book-api-746206212691.us-central1.run.app';
 
 export const searchBooks = async (query, topK = 10) => {
     try {
