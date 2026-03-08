@@ -1,79 +1,98 @@
 # ReadingHub
 
-## Overview
-This project is a full-stack book recommendation engine that leverages semantic search to help users find books based on natural language queries. It combines a modern React frontend with a robust FastAPI backend, utilizing vector embeddings for intelligent search results.
-
-## Technology Stack
-
-### Frontend
-- **Framework**: React (Vite)
-- **Styling**: Tailwind CSS
-- **Routing**: React Router
-- **State/Auth**: Supabase Client
-
-### Backend
-- **Framework**: FastAPI
-- **Vector Database**: Qdrant (for semantic search)
-- **Database**: Supabase (PostgreSQL for metadata and user data)
-- **ML Models**: HuggingFace transformers (`all-MiniLM-L6-v2`) for text embeddings
-- **Caching**: Custom Redis-based caching implementation
-- **Orchestration**: Apache Airflow (DAGs for data pipelines)
-
 ## Features
-- **Semantic Search**: Find books by describing plot, mood, or context rather than just keywords.
-- **User Authentication**: Secure sign-up and login via Supabase.
-- **Book Management**: Authenticated users can add new books to the database.
-- **Responsive Design**: Modern interface built with Tailwind CSS.
+ReadingHub is a full-stack book recommendation engine designed to solve the limitations of traditional keyword-based search. 
+
+**The Problem:** Traditional search engines require users to know exact titles, author names, or specific keywords to find a book. When a user only remembers the "vibe," a vague plot detail, or a specific emotional tone of a book, keyword-based search fails. 
+
+**The Solution:** ReadingHub leverages Natural Language Processing (NLP) and Vector Search technology to provide Semantic Search. It allows users to:
+*   Find books by describing the plot, mood, or context in natural language (e.g., "a thrilling mystery about a detective in London").
+*   Receive highly accurate recommendations based on semantic meaning rather than exact text matching.
+*   Manage their reading lists securely via an authenticated platform.
+*   Add new books to the database, which are automatically processed and embedded for future searches.
 
 ## Project Structure
-- `backend/`: Contains the FastAPI application, Airflow DAGs, and Docker configuration.
-- `frontend/`: Contains the React application.
-- `models/`: Directory for ML models.
-- `notebooks/`: Jupyter notebooks for data exploration and testing.
+The repository is structured to separate concerns between the user interface, backend APIs, data pipelines, and machine learning models.
 
-## Setup Instructions
+*   `backend/`: The core API server and data orchestration layer.
+    *   `src/`: Contains the FastAPI application, routing logic, and caching integrations.
+    *   `dags/`: Apache Airflow Directed Acyclic Graphs used for asynchronous data pipelines and embedding updates.
+    *   `Dockerfile`: Containerization configuration for deployable backend services.
+*   `frontend/`: The user-facing application built with React, Vite, and Tailwind CSS.
+    *   `src/services/`: API integration layer bridging the React app with the FastAPI backend.
+*   `models/`: Directory dedicated to storing pre-trained HuggingFace sentence transformers locally.
+*   `notebooks/`: Jupyter notebooks used during the research phase for data exploration, model testing, and data cleaning.
+
+## Technologies Used
+**Frontend Layer**
+*   **React (Vite):** A fast frontend build tool and library for constructing the user interface.
+*   **Tailwind CSS:** A utility-first CSS framework for responsive design.
+*   **Supabase Client:** Handles user authentication and session management directly from the browser.
+
+**Backend & ML Layer**
+*   **FastAPI:** A high-performance web framework for Python, used to serve the core search APIs.
+*   **HuggingFace Transformers (`all-MiniLM-L6-v2`):** A lightweight, fast NLP model used to generate 384-dimensional vector embeddings from text descriptions. It is optimized to run inference entirely on CPU.
+*   **Qdrant Vector Database:** A high-performance, Rust-based vector search engine utilizing the HNSW (Hierarchical Navigable Small World) algorithm to perform sub-millisecond similarity searches.
+    *   **Top-K Retrieval Logic:** Instead of performing a brute-force scan, the system leverages Qdrant's HNSW graph to rapidly navigate and locate the `Top-K` nearest neighbors. By passing `k=request.top_k` via Langchain, we delegate the entire sorting and filtering process to the database, achieving logarithmic $O(\log N)$ search latency.
+*   **Redis:** An in-memory data store providing a multi-tier caching strategy to store frequent search queries and computed embeddings, reducing API latency.
+
+**Data & Infrastructure Layer**
+*   **Supabase (PostgreSQL):** The primary relational database storing user information, book metadata, and authentication records.
+*   **Apache Airflow:** The workflow orchestration platform responsible for extracting new books from Supabase, transforming them through the embedding model, and loading them into Qdrant asynchronously.
+
+## Installation & Setup
 
 ### Prerequisites
-- Python 3.11+
-- Node.js & npm
-- Docker (optional, for containerization)
-- Redis server (running locally or remotely)
-- Apache Airflow (for pipeline orchestration)
-- Supabase account
-- Qdrant account
+*   Python 3.11+
+*   Node.js & npm
+*   Redis server (running locally or accessible via network)
+*   Apache Airflow instance
+*   Supabase account and project credentials
+*   Qdrant account and API credentials
 
 ### Backend Setup
-1. Navigate to the `backend` directory.
-2. Create a virtual environment and activate it.
-3. Install dependencies:
+1. Navigate to the backend directory:
+   ```bash
+   cd backend
+   ```
+2. Create and activate a Python virtual environment.
+3. Install the required Python dependencies:
    ```bash
    pip install -r requirements.txt
    ```
-4. Configure environment variables in a `.env` file (refer to `.env.example`).
-   - Ensure `REDIS_HOST` and `REDIS_PORT` are set correctly.
-5. Run the server:
+4. Copy the environment template and configure your credentials:
+   ```bash
+   cp .env.example .env
+   ```
+   Ensure you provide valid values for `SUPABASE_URL`, `SUPABASE_KEY`, `QDRANT_URL`, `QDRANT_API_KEY`, `REDIS_HOST`, and `REDIS_PORT`.
+5. Start the FastAPI development server:
    ```bash
    uvicorn src.api:app --reload
    ```
+   The API will be accessible at `http://localhost:8000`. The interactive Swagger documentation is available at `http://localhost:8000/docs`.
 
 ### Airflow Pipeline Setup
-1. Ensure your Airflow environment is active.
-2. Point Airflow to the `backend/dags` directory.
-3. Available DAGs:
-   - `update_embeddings_dag`: Updates vector embeddings for new books.
-   - `validation_dag`: Validates system integrity and data consistency.
+1. Ensure your Airflow environment is initialized and running.
+2. Point Airflow's DAGs folder to the `backend/dags` directory of this project.
+3. Configure your Airflow connections to match the credentials in your `.env` file.
+4. Enable the `update_embeddings_dag` in the Airflow UI to begin processing new book entries.
 
 ### Frontend Setup
-1. Navigate to the `frontend` directory.
-2. Install dependencies:
+1. Navigate to the frontend directory:
+   ```bash
+   cd frontend
+   ```
+2. Install the necessary Node packages:
    ```bash
    npm install
    ```
-3. Configure environment variables (if required).
-4. Start the development server:
+3. Create a `.env` file in the frontend directory (if required) to set VITE prefix variables for your API URLs.
+4. Start the Vite development server:
    ```bash
    npm run dev
    ```
+   The web application will be accessible at `http://localhost:5173`.
 
-## API Documentation
-Once the backend is running, you can access the interactive API documentation at `http://localhost:8000/docs`.
+## Contact
+Maintainer: nglong14
+Project Repository: [GitHub Link / Organization Link]
