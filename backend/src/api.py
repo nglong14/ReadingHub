@@ -114,7 +114,7 @@ async def search_books(request: SearchRequest):
         query_embedding = embedding_cache.get(request.query)
         if query_embedding is None:
             # Generate and cache the embedding
-            query_embedding = embedding.embed_query(request.query)
+            query_embedding = await embedding.embed_query(request.query)
             embedding_cache.set(request.query, query_embedding)
         
         # Use the embedding for vector search
