@@ -1,15 +1,28 @@
 # ReadingHub
 
-## Features
+## Table of Contents
+- [Overview](#overview)
+- [Features](#features)
+- [Project Structure](#project-structure)
+- [Technologies Used](#technologies-used)
+- [Installation & Setup](#installation--setup)
+- [Contact](#contact)
+
+## Overview
 ReadingHub is a full-stack book recommendation engine designed to solve the limitations of traditional keyword-based search. 
 
 **The Problem:** Traditional search engines require users to know exact titles, author names, or specific keywords to find a book. When a user only remembers the "vibe," a vague plot detail, or a specific emotional tone of a book, keyword-based search fails. 
 
-**The Solution:** ReadingHub leverages Natural Language Processing (NLP) and Vector Search technology to provide Semantic Search. It allows users to:
-*   Find books by describing the plot, mood, or context in natural language (e.g., "a thrilling mystery about a detective in London").
-*   Receive highly accurate recommendations based on semantic meaning rather than exact text matching.
-*   Manage their reading lists securely via an authenticated platform.
-*   Add new books to the database, which are automatically processed and embedded for future searches.
+**The Solution:** ReadingHub leverages Natural Language Processing (NLP) and Vector Search technology to provide Semantic Search. It matches queries based on semantic meaning and context rather than exact text overlap.
+
+## Features
+*   **Semantic Search Engine:** Find books by describing the plot, emotional tone, or genre using natural language.
+*   **Intelligent Recommendations:** Get highly accurate book suggestions powered by vector similarity scoring.
+*   **User Authentication:** Secure user registration and login functionality provided by Supabase.
+*   **Library Management:** Authenticated users can submit and add new books to the global database.
+*   **Automated Data Ingestion:** Background pipelines automatically generate embeddings for newly added books.
+*   **High-Speed Response:** Multi-tier caching system ensuring rapid search results and minimal API latency.
+*   **Responsive UI:** A clean, modern interface accessible on both desktop and mobile devices.
 
 ## Project Structure
 The repository is structured to separate concerns between the user interface, backend APIs, data pipelines, and machine learning models.
