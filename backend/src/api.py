@@ -8,6 +8,7 @@ from qdrant_client import QdrantClient
 from dotenv import load_dotenv
 from supabase._async.client import AsyncClient, create_client as async_create_client
 from utils.cache import CachedSearch, EmbeddingCache
+from utils.batch_encoder import BatchEncoder
 
 load_dotenv()
 
@@ -17,11 +18,12 @@ model: SentenceTransformer = None
 client: QdrantClient = None
 search_cache: CachedSearch = None
 embedding_cache: EmbeddingCache = None
+batch_encoder: BatchEncoder = None
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    global client, model, search_cache, embedding_cache, supabase
+    global client, model, search_cache, embedding_cache, supabase, batch_encoder
     supabase = await async_create_client(os.getenv("SUPABASE_URL"), os.getenv("SUPABASE_KEY"))
     model = SentenceTransformer("all-MiniLM-L6-v2")
     client = QdrantClient(
@@ -30,7 +32,10 @@ async def lifespan(app: FastAPI):
     )
     search_cache = CachedSearch()
     embedding_cache = EmbeddingCache()
+    batch_encoder = BatchEncoder(model=model, max_batch_size=32, max_wait_ms=50)
+    batch_encoder.start()
     yield
+    await batch_encoder.stop()
 
 
 app = FastAPI(
@@ -86,8 +91,7 @@ async def search_books(request: SearchRequest):
         # Check for cached embedding first
         query_embedding = embedding_cache.get(request.query)
         if query_embedding is None:
-            # SentenceTransformer.encode() is synchronous — no await needed
-            query_embedding = model.encode(request.query, normalize_embeddings=True).tolist()
+            query_embedding = await batch_encoder.submit(request.query)
             embedding_cache.set(request.query, query_embedding)
 
         # Direct Qdrant search — reads metadata from point payloads
